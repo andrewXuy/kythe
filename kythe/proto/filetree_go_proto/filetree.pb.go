@@ -7,7 +7,11 @@
 package filetree_go_proto
 
 import (
+	context "context"
 	proto "github.com/golang/protobuf/proto"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -615,4 +619,120 @@ func file_kythe_proto_filetree_proto_init() {
 	file_kythe_proto_filetree_proto_rawDesc = nil
 	file_kythe_proto_filetree_proto_goTypes = nil
 	file_kythe_proto_filetree_proto_depIdxs = nil
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConnInterface
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion6
+
+// FileTreeServiceClient is the client API for FileTreeService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type FileTreeServiceClient interface {
+	CorpusRoots(ctx context.Context, in *CorpusRootsRequest, opts ...grpc.CallOption) (*CorpusRootsReply, error)
+	Directory(ctx context.Context, in *DirectoryRequest, opts ...grpc.CallOption) (*DirectoryReply, error)
+}
+
+type fileTreeServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewFileTreeServiceClient(cc grpc.ClientConnInterface) FileTreeServiceClient {
+	return &fileTreeServiceClient{cc}
+}
+
+func (c *fileTreeServiceClient) CorpusRoots(ctx context.Context, in *CorpusRootsRequest, opts ...grpc.CallOption) (*CorpusRootsReply, error) {
+	out := new(CorpusRootsReply)
+	err := c.cc.Invoke(ctx, "/kythe.proto.FileTreeService/CorpusRoots", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fileTreeServiceClient) Directory(ctx context.Context, in *DirectoryRequest, opts ...grpc.CallOption) (*DirectoryReply, error) {
+	out := new(DirectoryReply)
+	err := c.cc.Invoke(ctx, "/kythe.proto.FileTreeService/Directory", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// FileTreeServiceServer is the server API for FileTreeService service.
+type FileTreeServiceServer interface {
+	CorpusRoots(context.Context, *CorpusRootsRequest) (*CorpusRootsReply, error)
+	Directory(context.Context, *DirectoryRequest) (*DirectoryReply, error)
+}
+
+// UnimplementedFileTreeServiceServer can be embedded to have forward compatible implementations.
+type UnimplementedFileTreeServiceServer struct {
+}
+
+func (*UnimplementedFileTreeServiceServer) CorpusRoots(context.Context, *CorpusRootsRequest) (*CorpusRootsReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CorpusRoots not implemented")
+}
+func (*UnimplementedFileTreeServiceServer) Directory(context.Context, *DirectoryRequest) (*DirectoryReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Directory not implemented")
+}
+
+func RegisterFileTreeServiceServer(s *grpc.Server, srv FileTreeServiceServer) {
+	s.RegisterService(&_FileTreeService_serviceDesc, srv)
+}
+
+func _FileTreeService_CorpusRoots_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CorpusRootsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FileTreeServiceServer).CorpusRoots(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kythe.proto.FileTreeService/CorpusRoots",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FileTreeServiceServer).CorpusRoots(ctx, req.(*CorpusRootsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FileTreeService_Directory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DirectoryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FileTreeServiceServer).Directory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kythe.proto.FileTreeService/Directory",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FileTreeServiceServer).Directory(ctx, req.(*DirectoryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _FileTreeService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "kythe.proto.FileTreeService",
+	HandlerType: (*FileTreeServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CorpusRoots",
+			Handler:    _FileTreeService_CorpusRoots_Handler,
+		},
+		{
+			MethodName: "Directory",
+			Handler:    _FileTreeService_Directory_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "kythe/proto/filetree.proto",
 }

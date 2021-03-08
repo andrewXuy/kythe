@@ -7,7 +7,11 @@
 package graph_go_proto
 
 import (
+	context "context"
 	proto "github.com/golang/protobuf/proto"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	common_go_proto "kythe.io/kythe/proto/common_go_proto"
@@ -682,4 +686,120 @@ func file_kythe_proto_graph_proto_init() {
 	file_kythe_proto_graph_proto_rawDesc = nil
 	file_kythe_proto_graph_proto_goTypes = nil
 	file_kythe_proto_graph_proto_depIdxs = nil
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConnInterface
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion6
+
+// GraphServiceClient is the client API for GraphService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type GraphServiceClient interface {
+	Nodes(ctx context.Context, in *NodesRequest, opts ...grpc.CallOption) (*NodesReply, error)
+	Edges(ctx context.Context, in *EdgesRequest, opts ...grpc.CallOption) (*EdgesReply, error)
+}
+
+type graphServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewGraphServiceClient(cc grpc.ClientConnInterface) GraphServiceClient {
+	return &graphServiceClient{cc}
+}
+
+func (c *graphServiceClient) Nodes(ctx context.Context, in *NodesRequest, opts ...grpc.CallOption) (*NodesReply, error) {
+	out := new(NodesReply)
+	err := c.cc.Invoke(ctx, "/kythe.proto.GraphService/Nodes", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *graphServiceClient) Edges(ctx context.Context, in *EdgesRequest, opts ...grpc.CallOption) (*EdgesReply, error) {
+	out := new(EdgesReply)
+	err := c.cc.Invoke(ctx, "/kythe.proto.GraphService/Edges", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// GraphServiceServer is the server API for GraphService service.
+type GraphServiceServer interface {
+	Nodes(context.Context, *NodesRequest) (*NodesReply, error)
+	Edges(context.Context, *EdgesRequest) (*EdgesReply, error)
+}
+
+// UnimplementedGraphServiceServer can be embedded to have forward compatible implementations.
+type UnimplementedGraphServiceServer struct {
+}
+
+func (*UnimplementedGraphServiceServer) Nodes(context.Context, *NodesRequest) (*NodesReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Nodes not implemented")
+}
+func (*UnimplementedGraphServiceServer) Edges(context.Context, *EdgesRequest) (*EdgesReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Edges not implemented")
+}
+
+func RegisterGraphServiceServer(s *grpc.Server, srv GraphServiceServer) {
+	s.RegisterService(&_GraphService_serviceDesc, srv)
+}
+
+func _GraphService_Nodes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(NodesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GraphServiceServer).Nodes(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kythe.proto.GraphService/Nodes",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GraphServiceServer).Nodes(ctx, req.(*NodesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _GraphService_Edges_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EdgesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GraphServiceServer).Edges(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kythe.proto.GraphService/Edges",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GraphServiceServer).Edges(ctx, req.(*EdgesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _GraphService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "kythe.proto.GraphService",
+	HandlerType: (*GraphServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Nodes",
+			Handler:    _GraphService_Nodes_Handler,
+		},
+		{
+			MethodName: "Edges",
+			Handler:    _GraphService_Edges_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "kythe/proto/graph.proto",
 }

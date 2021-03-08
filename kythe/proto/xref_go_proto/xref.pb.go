@@ -7,7 +7,11 @@
 package xref_go_proto
 
 import (
+	context "context"
 	proto "github.com/golang/protobuf/proto"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	common_go_proto "kythe.io/kythe/proto/common_go_proto"
@@ -2777,4 +2781,156 @@ func file_kythe_proto_xref_proto_init() {
 	file_kythe_proto_xref_proto_rawDesc = nil
 	file_kythe_proto_xref_proto_goTypes = nil
 	file_kythe_proto_xref_proto_depIdxs = nil
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConnInterface
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion6
+
+// XRefServiceClient is the client API for XRefService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type XRefServiceClient interface {
+	Decorations(ctx context.Context, in *DecorationsRequest, opts ...grpc.CallOption) (*DecorationsReply, error)
+	CrossReferences(ctx context.Context, in *CrossReferencesRequest, opts ...grpc.CallOption) (*CrossReferencesReply, error)
+	Documentation(ctx context.Context, in *DocumentationRequest, opts ...grpc.CallOption) (*DocumentationReply, error)
+}
+
+type xRefServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewXRefServiceClient(cc grpc.ClientConnInterface) XRefServiceClient {
+	return &xRefServiceClient{cc}
+}
+
+func (c *xRefServiceClient) Decorations(ctx context.Context, in *DecorationsRequest, opts ...grpc.CallOption) (*DecorationsReply, error) {
+	out := new(DecorationsReply)
+	err := c.cc.Invoke(ctx, "/kythe.proto.XRefService/Decorations", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *xRefServiceClient) CrossReferences(ctx context.Context, in *CrossReferencesRequest, opts ...grpc.CallOption) (*CrossReferencesReply, error) {
+	out := new(CrossReferencesReply)
+	err := c.cc.Invoke(ctx, "/kythe.proto.XRefService/CrossReferences", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *xRefServiceClient) Documentation(ctx context.Context, in *DocumentationRequest, opts ...grpc.CallOption) (*DocumentationReply, error) {
+	out := new(DocumentationReply)
+	err := c.cc.Invoke(ctx, "/kythe.proto.XRefService/Documentation", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// XRefServiceServer is the server API for XRefService service.
+type XRefServiceServer interface {
+	Decorations(context.Context, *DecorationsRequest) (*DecorationsReply, error)
+	CrossReferences(context.Context, *CrossReferencesRequest) (*CrossReferencesReply, error)
+	Documentation(context.Context, *DocumentationRequest) (*DocumentationReply, error)
+}
+
+// UnimplementedXRefServiceServer can be embedded to have forward compatible implementations.
+type UnimplementedXRefServiceServer struct {
+}
+
+func (*UnimplementedXRefServiceServer) Decorations(context.Context, *DecorationsRequest) (*DecorationsReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Decorations not implemented")
+}
+func (*UnimplementedXRefServiceServer) CrossReferences(context.Context, *CrossReferencesRequest) (*CrossReferencesReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CrossReferences not implemented")
+}
+func (*UnimplementedXRefServiceServer) Documentation(context.Context, *DocumentationRequest) (*DocumentationReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Documentation not implemented")
+}
+
+func RegisterXRefServiceServer(s *grpc.Server, srv XRefServiceServer) {
+	s.RegisterService(&_XRefService_serviceDesc, srv)
+}
+
+func _XRefService_Decorations_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DecorationsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(XRefServiceServer).Decorations(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kythe.proto.XRefService/Decorations",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(XRefServiceServer).Decorations(ctx, req.(*DecorationsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _XRefService_CrossReferences_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CrossReferencesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(XRefServiceServer).CrossReferences(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kythe.proto.XRefService/CrossReferences",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(XRefServiceServer).CrossReferences(ctx, req.(*CrossReferencesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _XRefService_Documentation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DocumentationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(XRefServiceServer).Documentation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kythe.proto.XRefService/Documentation",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(XRefServiceServer).Documentation(ctx, req.(*DocumentationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _XRefService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "kythe.proto.XRefService",
+	HandlerType: (*XRefServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Decorations",
+			Handler:    _XRefService_Decorations_Handler,
+		},
+		{
+			MethodName: "CrossReferences",
+			Handler:    _XRefService_CrossReferences_Handler,
+		},
+		{
+			MethodName: "Documentation",
+			Handler:    _XRefService_Documentation_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "kythe/proto/xref.proto",
 }

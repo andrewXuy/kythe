@@ -7,7 +7,11 @@
 package analysis_service_go_proto
 
 import (
+	context "context"
 	proto "github.com/golang/protobuf/proto"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	analysis_go_proto "kythe.io/kythe/proto/analysis_go_proto"
@@ -98,4 +102,247 @@ func file_kythe_proto_analysis_service_proto_init() {
 	file_kythe_proto_analysis_service_proto_rawDesc = nil
 	file_kythe_proto_analysis_service_proto_goTypes = nil
 	file_kythe_proto_analysis_service_proto_depIdxs = nil
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConnInterface
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion6
+
+// CompilationAnalyzerClient is the client API for CompilationAnalyzer service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type CompilationAnalyzerClient interface {
+	Analyze(ctx context.Context, in *analysis_go_proto.AnalysisRequest, opts ...grpc.CallOption) (CompilationAnalyzer_AnalyzeClient, error)
+}
+
+type compilationAnalyzerClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewCompilationAnalyzerClient(cc grpc.ClientConnInterface) CompilationAnalyzerClient {
+	return &compilationAnalyzerClient{cc}
+}
+
+func (c *compilationAnalyzerClient) Analyze(ctx context.Context, in *analysis_go_proto.AnalysisRequest, opts ...grpc.CallOption) (CompilationAnalyzer_AnalyzeClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_CompilationAnalyzer_serviceDesc.Streams[0], "/kythe.proto.CompilationAnalyzer/Analyze", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &compilationAnalyzerAnalyzeClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type CompilationAnalyzer_AnalyzeClient interface {
+	Recv() (*analysis_go_proto.AnalysisOutput, error)
+	grpc.ClientStream
+}
+
+type compilationAnalyzerAnalyzeClient struct {
+	grpc.ClientStream
+}
+
+func (x *compilationAnalyzerAnalyzeClient) Recv() (*analysis_go_proto.AnalysisOutput, error) {
+	m := new(analysis_go_proto.AnalysisOutput)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+// CompilationAnalyzerServer is the server API for CompilationAnalyzer service.
+type CompilationAnalyzerServer interface {
+	Analyze(*analysis_go_proto.AnalysisRequest, CompilationAnalyzer_AnalyzeServer) error
+}
+
+// UnimplementedCompilationAnalyzerServer can be embedded to have forward compatible implementations.
+type UnimplementedCompilationAnalyzerServer struct {
+}
+
+func (*UnimplementedCompilationAnalyzerServer) Analyze(*analysis_go_proto.AnalysisRequest, CompilationAnalyzer_AnalyzeServer) error {
+	return status.Errorf(codes.Unimplemented, "method Analyze not implemented")
+}
+
+func RegisterCompilationAnalyzerServer(s *grpc.Server, srv CompilationAnalyzerServer) {
+	s.RegisterService(&_CompilationAnalyzer_serviceDesc, srv)
+}
+
+func _CompilationAnalyzer_Analyze_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(analysis_go_proto.AnalysisRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(CompilationAnalyzerServer).Analyze(m, &compilationAnalyzerAnalyzeServer{stream})
+}
+
+type CompilationAnalyzer_AnalyzeServer interface {
+	Send(*analysis_go_proto.AnalysisOutput) error
+	grpc.ServerStream
+}
+
+type compilationAnalyzerAnalyzeServer struct {
+	grpc.ServerStream
+}
+
+func (x *compilationAnalyzerAnalyzeServer) Send(m *analysis_go_proto.AnalysisOutput) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+var _CompilationAnalyzer_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "kythe.proto.CompilationAnalyzer",
+	HandlerType: (*CompilationAnalyzerServer)(nil),
+	Methods:     []grpc.MethodDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "Analyze",
+			Handler:       _CompilationAnalyzer_Analyze_Handler,
+			ServerStreams: true,
+		},
+	},
+	Metadata: "kythe/proto/analysis_service.proto",
+}
+
+// FileDataServiceClient is the client API for FileDataService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type FileDataServiceClient interface {
+	Get(ctx context.Context, in *analysis_go_proto.FilesRequest, opts ...grpc.CallOption) (FileDataService_GetClient, error)
+	GetFileData(ctx context.Context, in *analysis_go_proto.FileInfo, opts ...grpc.CallOption) (*analysis_go_proto.FileData, error)
+}
+
+type fileDataServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewFileDataServiceClient(cc grpc.ClientConnInterface) FileDataServiceClient {
+	return &fileDataServiceClient{cc}
+}
+
+func (c *fileDataServiceClient) Get(ctx context.Context, in *analysis_go_proto.FilesRequest, opts ...grpc.CallOption) (FileDataService_GetClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_FileDataService_serviceDesc.Streams[0], "/kythe.proto.FileDataService/Get", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &fileDataServiceGetClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type FileDataService_GetClient interface {
+	Recv() (*analysis_go_proto.FileData, error)
+	grpc.ClientStream
+}
+
+type fileDataServiceGetClient struct {
+	grpc.ClientStream
+}
+
+func (x *fileDataServiceGetClient) Recv() (*analysis_go_proto.FileData, error) {
+	m := new(analysis_go_proto.FileData)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *fileDataServiceClient) GetFileData(ctx context.Context, in *analysis_go_proto.FileInfo, opts ...grpc.CallOption) (*analysis_go_proto.FileData, error) {
+	out := new(analysis_go_proto.FileData)
+	err := c.cc.Invoke(ctx, "/kythe.proto.FileDataService/GetFileData", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// FileDataServiceServer is the server API for FileDataService service.
+type FileDataServiceServer interface {
+	Get(*analysis_go_proto.FilesRequest, FileDataService_GetServer) error
+	GetFileData(context.Context, *analysis_go_proto.FileInfo) (*analysis_go_proto.FileData, error)
+}
+
+// UnimplementedFileDataServiceServer can be embedded to have forward compatible implementations.
+type UnimplementedFileDataServiceServer struct {
+}
+
+func (*UnimplementedFileDataServiceServer) Get(*analysis_go_proto.FilesRequest, FileDataService_GetServer) error {
+	return status.Errorf(codes.Unimplemented, "method Get not implemented")
+}
+func (*UnimplementedFileDataServiceServer) GetFileData(context.Context, *analysis_go_proto.FileInfo) (*analysis_go_proto.FileData, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetFileData not implemented")
+}
+
+func RegisterFileDataServiceServer(s *grpc.Server, srv FileDataServiceServer) {
+	s.RegisterService(&_FileDataService_serviceDesc, srv)
+}
+
+func _FileDataService_Get_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(analysis_go_proto.FilesRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(FileDataServiceServer).Get(m, &fileDataServiceGetServer{stream})
+}
+
+type FileDataService_GetServer interface {
+	Send(*analysis_go_proto.FileData) error
+	grpc.ServerStream
+}
+
+type fileDataServiceGetServer struct {
+	grpc.ServerStream
+}
+
+func (x *fileDataServiceGetServer) Send(m *analysis_go_proto.FileData) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _FileDataService_GetFileData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(analysis_go_proto.FileInfo)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FileDataServiceServer).GetFileData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kythe.proto.FileDataService/GetFileData",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FileDataServiceServer).GetFileData(ctx, req.(*analysis_go_proto.FileInfo))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _FileDataService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "kythe.proto.FileDataService",
+	HandlerType: (*FileDataServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetFileData",
+			Handler:    _FileDataService_GetFileData_Handler,
+		},
+	},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "Get",
+			Handler:       _FileDataService_Get_Handler,
+			ServerStreams: true,
+		},
+	},
+	Metadata: "kythe/proto/analysis_service.proto",
 }

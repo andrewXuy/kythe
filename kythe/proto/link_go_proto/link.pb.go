@@ -7,7 +7,11 @@
 package link_go_proto
 
 import (
+	context "context"
 	proto "github.com/golang/protobuf/proto"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	common_go_proto "kythe.io/kythe/proto/common_go_proto"
@@ -678,4 +682,84 @@ func file_kythe_proto_link_proto_init() {
 	file_kythe_proto_link_proto_rawDesc = nil
 	file_kythe_proto_link_proto_goTypes = nil
 	file_kythe_proto_link_proto_depIdxs = nil
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConnInterface
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion6
+
+// LinkServiceClient is the client API for LinkService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type LinkServiceClient interface {
+	Resolve(ctx context.Context, in *LinkRequest, opts ...grpc.CallOption) (*LinkReply, error)
+}
+
+type linkServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewLinkServiceClient(cc grpc.ClientConnInterface) LinkServiceClient {
+	return &linkServiceClient{cc}
+}
+
+func (c *linkServiceClient) Resolve(ctx context.Context, in *LinkRequest, opts ...grpc.CallOption) (*LinkReply, error) {
+	out := new(LinkReply)
+	err := c.cc.Invoke(ctx, "/kythe.proto.LinkService/Resolve", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// LinkServiceServer is the server API for LinkService service.
+type LinkServiceServer interface {
+	Resolve(context.Context, *LinkRequest) (*LinkReply, error)
+}
+
+// UnimplementedLinkServiceServer can be embedded to have forward compatible implementations.
+type UnimplementedLinkServiceServer struct {
+}
+
+func (*UnimplementedLinkServiceServer) Resolve(context.Context, *LinkRequest) (*LinkReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Resolve not implemented")
+}
+
+func RegisterLinkServiceServer(s *grpc.Server, srv LinkServiceServer) {
+	s.RegisterService(&_LinkService_serviceDesc, srv)
+}
+
+func _LinkService_Resolve_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LinkRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LinkServiceServer).Resolve(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kythe.proto.LinkService/Resolve",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LinkServiceServer).Resolve(ctx, req.(*LinkRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _LinkService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "kythe.proto.LinkService",
+	HandlerType: (*LinkServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Resolve",
+			Handler:    _LinkService_Resolve_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "kythe/proto/link.proto",
 }

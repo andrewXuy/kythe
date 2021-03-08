@@ -7,7 +7,11 @@
 package status_service_go_proto
 
 import (
+	context "context"
 	proto "github.com/golang/protobuf/proto"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	common_go_proto "kythe.io/kythe/proto/common_go_proto"
@@ -238,4 +242,84 @@ func file_kythe_proto_status_service_proto_init() {
 	file_kythe_proto_status_service_proto_rawDesc = nil
 	file_kythe_proto_status_service_proto_goTypes = nil
 	file_kythe_proto_status_service_proto_depIdxs = nil
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConnInterface
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion6
+
+// StatusServiceClient is the client API for StatusService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type StatusServiceClient interface {
+	Status(ctx context.Context, in *StatusRequest, opts ...grpc.CallOption) (*StatusReply, error)
+}
+
+type statusServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewStatusServiceClient(cc grpc.ClientConnInterface) StatusServiceClient {
+	return &statusServiceClient{cc}
+}
+
+func (c *statusServiceClient) Status(ctx context.Context, in *StatusRequest, opts ...grpc.CallOption) (*StatusReply, error) {
+	out := new(StatusReply)
+	err := c.cc.Invoke(ctx, "/kythe.proto.StatusService/Status", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// StatusServiceServer is the server API for StatusService service.
+type StatusServiceServer interface {
+	Status(context.Context, *StatusRequest) (*StatusReply, error)
+}
+
+// UnimplementedStatusServiceServer can be embedded to have forward compatible implementations.
+type UnimplementedStatusServiceServer struct {
+}
+
+func (*UnimplementedStatusServiceServer) Status(context.Context, *StatusRequest) (*StatusReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Status not implemented")
+}
+
+func RegisterStatusServiceServer(s *grpc.Server, srv StatusServiceServer) {
+	s.RegisterService(&_StatusService_serviceDesc, srv)
+}
+
+func _StatusService_Status_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StatusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StatusServiceServer).Status(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kythe.proto.StatusService/Status",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StatusServiceServer).Status(ctx, req.(*StatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _StatusService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "kythe.proto.StatusService",
+	HandlerType: (*StatusServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Status",
+			Handler:    _StatusService_Status_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "kythe/proto/status_service.proto",
 }

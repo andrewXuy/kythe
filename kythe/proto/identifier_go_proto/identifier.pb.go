@@ -7,7 +7,11 @@
 package identifier_go_proto
 
 import (
+	context "context"
 	proto "github.com/golang/protobuf/proto"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -342,4 +346,84 @@ func file_kythe_proto_identifier_proto_init() {
 	file_kythe_proto_identifier_proto_rawDesc = nil
 	file_kythe_proto_identifier_proto_goTypes = nil
 	file_kythe_proto_identifier_proto_depIdxs = nil
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConnInterface
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion6
+
+// IdentifierServiceClient is the client API for IdentifierService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type IdentifierServiceClient interface {
+	Find(ctx context.Context, in *FindRequest, opts ...grpc.CallOption) (*FindReply, error)
+}
+
+type identifierServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewIdentifierServiceClient(cc grpc.ClientConnInterface) IdentifierServiceClient {
+	return &identifierServiceClient{cc}
+}
+
+func (c *identifierServiceClient) Find(ctx context.Context, in *FindRequest, opts ...grpc.CallOption) (*FindReply, error) {
+	out := new(FindReply)
+	err := c.cc.Invoke(ctx, "/kythe.proto.IdentifierService/Find", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// IdentifierServiceServer is the server API for IdentifierService service.
+type IdentifierServiceServer interface {
+	Find(context.Context, *FindRequest) (*FindReply, error)
+}
+
+// UnimplementedIdentifierServiceServer can be embedded to have forward compatible implementations.
+type UnimplementedIdentifierServiceServer struct {
+}
+
+func (*UnimplementedIdentifierServiceServer) Find(context.Context, *FindRequest) (*FindReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Find not implemented")
+}
+
+func RegisterIdentifierServiceServer(s *grpc.Server, srv IdentifierServiceServer) {
+	s.RegisterService(&_IdentifierService_serviceDesc, srv)
+}
+
+func _IdentifierService_Find_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FindRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(IdentifierServiceServer).Find(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kythe.proto.IdentifierService/Find",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(IdentifierServiceServer).Find(ctx, req.(*FindRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _IdentifierService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "kythe.proto.IdentifierService",
+	HandlerType: (*IdentifierServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Find",
+			Handler:    _IdentifierService_Find_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "kythe/proto/identifier.proto",
 }

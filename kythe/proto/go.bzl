@@ -25,7 +25,7 @@ _go_proto_src = rule(
         "library": attr.label(
             providers = [_GoSource],
             allow_single_file = True,
-            mandatory = True,
+            mandatory = False,
         ),
     },
     outputs = {
@@ -70,6 +70,7 @@ def go_kythe_proto(proto = None, deps = [], importpath = None, visibility = None
         name = name,
         deps = deps,
         importpath = importpath,
+        compilers = ["@io_bazel_rules_go//proto:go_grpc"],
         proto = proto,
         visibility = visibility,
     )

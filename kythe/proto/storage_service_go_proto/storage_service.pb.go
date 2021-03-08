@@ -7,7 +7,11 @@
 package storage_service_go_proto
 
 import (
+	context "context"
 	proto "github.com/golang/protobuf/proto"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	storage_go_proto "kythe.io/kythe/proto/storage_go_proto"
@@ -111,4 +115,347 @@ func file_kythe_proto_storage_service_proto_init() {
 	file_kythe_proto_storage_service_proto_rawDesc = nil
 	file_kythe_proto_storage_service_proto_goTypes = nil
 	file_kythe_proto_storage_service_proto_depIdxs = nil
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConnInterface
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion6
+
+// GraphStoreClient is the client API for GraphStore service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type GraphStoreClient interface {
+	Read(ctx context.Context, in *storage_go_proto.ReadRequest, opts ...grpc.CallOption) (GraphStore_ReadClient, error)
+	Scan(ctx context.Context, in *storage_go_proto.ScanRequest, opts ...grpc.CallOption) (GraphStore_ScanClient, error)
+	Write(ctx context.Context, in *storage_go_proto.WriteRequest, opts ...grpc.CallOption) (*storage_go_proto.WriteReply, error)
+}
+
+type graphStoreClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewGraphStoreClient(cc grpc.ClientConnInterface) GraphStoreClient {
+	return &graphStoreClient{cc}
+}
+
+func (c *graphStoreClient) Read(ctx context.Context, in *storage_go_proto.ReadRequest, opts ...grpc.CallOption) (GraphStore_ReadClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_GraphStore_serviceDesc.Streams[0], "/kythe.proto.GraphStore/Read", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &graphStoreReadClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type GraphStore_ReadClient interface {
+	Recv() (*storage_go_proto.Entry, error)
+	grpc.ClientStream
+}
+
+type graphStoreReadClient struct {
+	grpc.ClientStream
+}
+
+func (x *graphStoreReadClient) Recv() (*storage_go_proto.Entry, error) {
+	m := new(storage_go_proto.Entry)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *graphStoreClient) Scan(ctx context.Context, in *storage_go_proto.ScanRequest, opts ...grpc.CallOption) (GraphStore_ScanClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_GraphStore_serviceDesc.Streams[1], "/kythe.proto.GraphStore/Scan", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &graphStoreScanClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type GraphStore_ScanClient interface {
+	Recv() (*storage_go_proto.Entry, error)
+	grpc.ClientStream
+}
+
+type graphStoreScanClient struct {
+	grpc.ClientStream
+}
+
+func (x *graphStoreScanClient) Recv() (*storage_go_proto.Entry, error) {
+	m := new(storage_go_proto.Entry)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *graphStoreClient) Write(ctx context.Context, in *storage_go_proto.WriteRequest, opts ...grpc.CallOption) (*storage_go_proto.WriteReply, error) {
+	out := new(storage_go_proto.WriteReply)
+	err := c.cc.Invoke(ctx, "/kythe.proto.GraphStore/Write", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// GraphStoreServer is the server API for GraphStore service.
+type GraphStoreServer interface {
+	Read(*storage_go_proto.ReadRequest, GraphStore_ReadServer) error
+	Scan(*storage_go_proto.ScanRequest, GraphStore_ScanServer) error
+	Write(context.Context, *storage_go_proto.WriteRequest) (*storage_go_proto.WriteReply, error)
+}
+
+// UnimplementedGraphStoreServer can be embedded to have forward compatible implementations.
+type UnimplementedGraphStoreServer struct {
+}
+
+func (*UnimplementedGraphStoreServer) Read(*storage_go_proto.ReadRequest, GraphStore_ReadServer) error {
+	return status.Errorf(codes.Unimplemented, "method Read not implemented")
+}
+func (*UnimplementedGraphStoreServer) Scan(*storage_go_proto.ScanRequest, GraphStore_ScanServer) error {
+	return status.Errorf(codes.Unimplemented, "method Scan not implemented")
+}
+func (*UnimplementedGraphStoreServer) Write(context.Context, *storage_go_proto.WriteRequest) (*storage_go_proto.WriteReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Write not implemented")
+}
+
+func RegisterGraphStoreServer(s *grpc.Server, srv GraphStoreServer) {
+	s.RegisterService(&_GraphStore_serviceDesc, srv)
+}
+
+func _GraphStore_Read_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(storage_go_proto.ReadRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(GraphStoreServer).Read(m, &graphStoreReadServer{stream})
+}
+
+type GraphStore_ReadServer interface {
+	Send(*storage_go_proto.Entry) error
+	grpc.ServerStream
+}
+
+type graphStoreReadServer struct {
+	grpc.ServerStream
+}
+
+func (x *graphStoreReadServer) Send(m *storage_go_proto.Entry) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _GraphStore_Scan_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(storage_go_proto.ScanRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(GraphStoreServer).Scan(m, &graphStoreScanServer{stream})
+}
+
+type GraphStore_ScanServer interface {
+	Send(*storage_go_proto.Entry) error
+	grpc.ServerStream
+}
+
+type graphStoreScanServer struct {
+	grpc.ServerStream
+}
+
+func (x *graphStoreScanServer) Send(m *storage_go_proto.Entry) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _GraphStore_Write_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(storage_go_proto.WriteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GraphStoreServer).Write(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kythe.proto.GraphStore/Write",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GraphStoreServer).Write(ctx, req.(*storage_go_proto.WriteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _GraphStore_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "kythe.proto.GraphStore",
+	HandlerType: (*GraphStoreServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Write",
+			Handler:    _GraphStore_Write_Handler,
+		},
+	},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "Read",
+			Handler:       _GraphStore_Read_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "Scan",
+			Handler:       _GraphStore_Scan_Handler,
+			ServerStreams: true,
+		},
+	},
+	Metadata: "kythe/proto/storage_service.proto",
+}
+
+// ShardedGraphStoreClient is the client API for ShardedGraphStore service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type ShardedGraphStoreClient interface {
+	Count(ctx context.Context, in *storage_go_proto.CountRequest, opts ...grpc.CallOption) (*storage_go_proto.CountReply, error)
+	Shard(ctx context.Context, in *storage_go_proto.ShardRequest, opts ...grpc.CallOption) (ShardedGraphStore_ShardClient, error)
+}
+
+type shardedGraphStoreClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewShardedGraphStoreClient(cc grpc.ClientConnInterface) ShardedGraphStoreClient {
+	return &shardedGraphStoreClient{cc}
+}
+
+func (c *shardedGraphStoreClient) Count(ctx context.Context, in *storage_go_proto.CountRequest, opts ...grpc.CallOption) (*storage_go_proto.CountReply, error) {
+	out := new(storage_go_proto.CountReply)
+	err := c.cc.Invoke(ctx, "/kythe.proto.ShardedGraphStore/Count", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *shardedGraphStoreClient) Shard(ctx context.Context, in *storage_go_proto.ShardRequest, opts ...grpc.CallOption) (ShardedGraphStore_ShardClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_ShardedGraphStore_serviceDesc.Streams[0], "/kythe.proto.ShardedGraphStore/Shard", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &shardedGraphStoreShardClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type ShardedGraphStore_ShardClient interface {
+	Recv() (*storage_go_proto.Entry, error)
+	grpc.ClientStream
+}
+
+type shardedGraphStoreShardClient struct {
+	grpc.ClientStream
+}
+
+func (x *shardedGraphStoreShardClient) Recv() (*storage_go_proto.Entry, error) {
+	m := new(storage_go_proto.Entry)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+// ShardedGraphStoreServer is the server API for ShardedGraphStore service.
+type ShardedGraphStoreServer interface {
+	Count(context.Context, *storage_go_proto.CountRequest) (*storage_go_proto.CountReply, error)
+	Shard(*storage_go_proto.ShardRequest, ShardedGraphStore_ShardServer) error
+}
+
+// UnimplementedShardedGraphStoreServer can be embedded to have forward compatible implementations.
+type UnimplementedShardedGraphStoreServer struct {
+}
+
+func (*UnimplementedShardedGraphStoreServer) Count(context.Context, *storage_go_proto.CountRequest) (*storage_go_proto.CountReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Count not implemented")
+}
+func (*UnimplementedShardedGraphStoreServer) Shard(*storage_go_proto.ShardRequest, ShardedGraphStore_ShardServer) error {
+	return status.Errorf(codes.Unimplemented, "method Shard not implemented")
+}
+
+func RegisterShardedGraphStoreServer(s *grpc.Server, srv ShardedGraphStoreServer) {
+	s.RegisterService(&_ShardedGraphStore_serviceDesc, srv)
+}
+
+func _ShardedGraphStore_Count_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(storage_go_proto.CountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ShardedGraphStoreServer).Count(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kythe.proto.ShardedGraphStore/Count",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ShardedGraphStoreServer).Count(ctx, req.(*storage_go_proto.CountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ShardedGraphStore_Shard_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(storage_go_proto.ShardRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(ShardedGraphStoreServer).Shard(m, &shardedGraphStoreShardServer{stream})
+}
+
+type ShardedGraphStore_ShardServer interface {
+	Send(*storage_go_proto.Entry) error
+	grpc.ServerStream
+}
+
+type shardedGraphStoreShardServer struct {
+	grpc.ServerStream
+}
+
+func (x *shardedGraphStoreShardServer) Send(m *storage_go_proto.Entry) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+var _ShardedGraphStore_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "kythe.proto.ShardedGraphStore",
+	HandlerType: (*ShardedGraphStoreServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Count",
+			Handler:    _ShardedGraphStore_Count_Handler,
+		},
+	},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "Shard",
+			Handler:       _ShardedGraphStore_Shard_Handler,
+			ServerStreams: true,
+		},
+	},
+	Metadata: "kythe/proto/storage_service.proto",
 }

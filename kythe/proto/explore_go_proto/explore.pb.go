@@ -7,7 +7,11 @@
 package explore_go_proto
 
 import (
+	context "context"
 	proto "github.com/golang/protobuf/proto"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	common_go_proto "kythe.io/kythe/proto/common_go_proto"
@@ -1406,4 +1410,264 @@ func file_kythe_proto_explore_proto_init() {
 	file_kythe_proto_explore_proto_rawDesc = nil
 	file_kythe_proto_explore_proto_goTypes = nil
 	file_kythe_proto_explore_proto_depIdxs = nil
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConnInterface
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion6
+
+// ExploreServiceClient is the client API for ExploreService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type ExploreServiceClient interface {
+	Callers(ctx context.Context, in *CallersRequest, opts ...grpc.CallOption) (*CallersReply, error)
+	Callees(ctx context.Context, in *CalleesRequest, opts ...grpc.CallOption) (*CalleesReply, error)
+	Parents(ctx context.Context, in *ParentsRequest, opts ...grpc.CallOption) (*ParentsReply, error)
+	Children(ctx context.Context, in *ChildrenRequest, opts ...grpc.CallOption) (*ChildrenReply, error)
+	TypeHierarchy(ctx context.Context, in *TypeHierarchyRequest, opts ...grpc.CallOption) (*TypeHierarchyReply, error)
+	Parameters(ctx context.Context, in *ParametersRequest, opts ...grpc.CallOption) (*ParametersReply, error)
+}
+
+type exploreServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewExploreServiceClient(cc grpc.ClientConnInterface) ExploreServiceClient {
+	return &exploreServiceClient{cc}
+}
+
+func (c *exploreServiceClient) Callers(ctx context.Context, in *CallersRequest, opts ...grpc.CallOption) (*CallersReply, error) {
+	out := new(CallersReply)
+	err := c.cc.Invoke(ctx, "/kythe.proto.ExploreService/Callers", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *exploreServiceClient) Callees(ctx context.Context, in *CalleesRequest, opts ...grpc.CallOption) (*CalleesReply, error) {
+	out := new(CalleesReply)
+	err := c.cc.Invoke(ctx, "/kythe.proto.ExploreService/Callees", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *exploreServiceClient) Parents(ctx context.Context, in *ParentsRequest, opts ...grpc.CallOption) (*ParentsReply, error) {
+	out := new(ParentsReply)
+	err := c.cc.Invoke(ctx, "/kythe.proto.ExploreService/Parents", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *exploreServiceClient) Children(ctx context.Context, in *ChildrenRequest, opts ...grpc.CallOption) (*ChildrenReply, error) {
+	out := new(ChildrenReply)
+	err := c.cc.Invoke(ctx, "/kythe.proto.ExploreService/Children", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *exploreServiceClient) TypeHierarchy(ctx context.Context, in *TypeHierarchyRequest, opts ...grpc.CallOption) (*TypeHierarchyReply, error) {
+	out := new(TypeHierarchyReply)
+	err := c.cc.Invoke(ctx, "/kythe.proto.ExploreService/TypeHierarchy", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *exploreServiceClient) Parameters(ctx context.Context, in *ParametersRequest, opts ...grpc.CallOption) (*ParametersReply, error) {
+	out := new(ParametersReply)
+	err := c.cc.Invoke(ctx, "/kythe.proto.ExploreService/Parameters", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ExploreServiceServer is the server API for ExploreService service.
+type ExploreServiceServer interface {
+	Callers(context.Context, *CallersRequest) (*CallersReply, error)
+	Callees(context.Context, *CalleesRequest) (*CalleesReply, error)
+	Parents(context.Context, *ParentsRequest) (*ParentsReply, error)
+	Children(context.Context, *ChildrenRequest) (*ChildrenReply, error)
+	TypeHierarchy(context.Context, *TypeHierarchyRequest) (*TypeHierarchyReply, error)
+	Parameters(context.Context, *ParametersRequest) (*ParametersReply, error)
+}
+
+// UnimplementedExploreServiceServer can be embedded to have forward compatible implementations.
+type UnimplementedExploreServiceServer struct {
+}
+
+func (*UnimplementedExploreServiceServer) Callers(context.Context, *CallersRequest) (*CallersReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Callers not implemented")
+}
+func (*UnimplementedExploreServiceServer) Callees(context.Context, *CalleesRequest) (*CalleesReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Callees not implemented")
+}
+func (*UnimplementedExploreServiceServer) Parents(context.Context, *ParentsRequest) (*ParentsReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Parents not implemented")
+}
+func (*UnimplementedExploreServiceServer) Children(context.Context, *ChildrenRequest) (*ChildrenReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Children not implemented")
+}
+func (*UnimplementedExploreServiceServer) TypeHierarchy(context.Context, *TypeHierarchyRequest) (*TypeHierarchyReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TypeHierarchy not implemented")
+}
+func (*UnimplementedExploreServiceServer) Parameters(context.Context, *ParametersRequest) (*ParametersReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Parameters not implemented")
+}
+
+func RegisterExploreServiceServer(s *grpc.Server, srv ExploreServiceServer) {
+	s.RegisterService(&_ExploreService_serviceDesc, srv)
+}
+
+func _ExploreService_Callers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CallersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExploreServiceServer).Callers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kythe.proto.ExploreService/Callers",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExploreServiceServer).Callers(ctx, req.(*CallersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ExploreService_Callees_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CalleesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExploreServiceServer).Callees(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kythe.proto.ExploreService/Callees",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExploreServiceServer).Callees(ctx, req.(*CalleesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ExploreService_Parents_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ParentsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExploreServiceServer).Parents(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kythe.proto.ExploreService/Parents",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExploreServiceServer).Parents(ctx, req.(*ParentsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ExploreService_Children_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChildrenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExploreServiceServer).Children(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kythe.proto.ExploreService/Children",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExploreServiceServer).Children(ctx, req.(*ChildrenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ExploreService_TypeHierarchy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TypeHierarchyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExploreServiceServer).TypeHierarchy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kythe.proto.ExploreService/TypeHierarchy",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExploreServiceServer).TypeHierarchy(ctx, req.(*TypeHierarchyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ExploreService_Parameters_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ParametersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExploreServiceServer).Parameters(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kythe.proto.ExploreService/Parameters",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExploreServiceServer).Parameters(ctx, req.(*ParametersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _ExploreService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "kythe.proto.ExploreService",
+	HandlerType: (*ExploreServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Callers",
+			Handler:    _ExploreService_Callers_Handler,
+		},
+		{
+			MethodName: "Callees",
+			Handler:    _ExploreService_Callees_Handler,
+		},
+		{
+			MethodName: "Parents",
+			Handler:    _ExploreService_Parents_Handler,
+		},
+		{
+			MethodName: "Children",
+			Handler:    _ExploreService_Children_Handler,
+		},
+		{
+			MethodName: "TypeHierarchy",
+			Handler:    _ExploreService_TypeHierarchy_Handler,
+		},
+		{
+			MethodName: "Parameters",
+			Handler:    _ExploreService_Parameters_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "kythe/proto/explore.proto",
 }
